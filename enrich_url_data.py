@@ -16,7 +16,7 @@ enriched_csv.write('len,spec_chars,domain,depth,numericals_count,word_count,labe
 def check_url_contains_words(url):
     found_words = []
     for letter in LETTERS:
-        dictionary = open('{}/dictionary/wb1913_{}.html'.format(os.path.dirname(os.path.realpath(__file__)),letter),'r')
+        dictionary = open('{}/dictionary/wb1913_{}.txt'.format(os.path.dirname(os.path.realpath(__file__)),letter),'r')
         for line in dictionary.readlines():
             word = line.split('</B>')[0].replace('<P><B>','').lower()
             if str(word) in url.lower() and len(word)>1 and word not in found_words:
