@@ -27,7 +27,7 @@ count = 0
 for row in  csv.reader(open('url_data.csv','r'), delimiter = ','):
     #print '-----'
     print str(count)
-    count+=1
+    count += 1
     if 'bad' in row[1].lower():
         label='1'
     else:
@@ -35,15 +35,15 @@ for row in  csv.reader(open('url_data.csv','r'), delimiter = ','):
     spec_chars=0
     depth = 0
     numericals_count = 0
-    word_count=0
+    word_count = 0
     url = str(l[0])
     #print url
     word_count=check_url_contains_words(url)
     for c in str(l):
         if c in SPEC_CHARS:
-            spec_chars+=1
+            spec_chars += 1
         if c in ['/']:
-            depth+=1
+            depth += 1
         if c in NUMBERS:
             numericals_count += 1
     enriched_csv.write(str(len(l[0]))+','+str(spec_chars)+',0,'+str(depth)+','+str(numericals_count)+','+str(word_count)+','+label+'\n')
