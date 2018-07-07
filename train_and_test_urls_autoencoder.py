@@ -15,10 +15,7 @@ from sklearn.metrics import (confusion_matrix, precision_recall_curve, auc,
                              roc_curve, recall_score, classification_report, f1_score,
                              precision_recall_fscore_support)
 
-
-
 df = pd.read_csv("url_enriched_data.csv")
-
 
 # Dimension of the dataset
 print df.shape
@@ -30,9 +27,6 @@ frauds = df[df.label == 1]
 normal = df[df.label == 0]
 
 print   frauds.shape
-
-#print frauds.Amount.describe()
-#print normal.Amount.describe()
 
 data = df.drop(['domain'], axis=1)
 print data.shape
@@ -46,10 +40,6 @@ y_test = X_test['label']
 X_test = X_test.drop(['label'], axis=1)
 X_train = X_train.values
 X_test = X_test.values
-print X_train.shape
-print X_test.shape
-
-
 
 input_dim = X_train.shape[1]
 encoding_dim = input_dim
@@ -71,30 +61,13 @@ autoencoder = Model(inputs=input_layer, outputs=decoder)
 nb_epoch = 100
 batch_size = 60
 
-
 autoencoder.compile(optimizer='adam',
                     loss='mean_squared_error',
                     metrics=['accuracy'])
 
-checkpointer = ModelCheckpoint(filepath="model.h5",
-                               verbose=0,
-                               save_best_only=True)
-tensorboard = TensorBoard(log_dir='./logs',
-                          histogram_freq=0,
-                          write_graph=True,
-                          write_images=True)
-
-history = autoencoder.fit(X_train, X_train,
-                    epochs=nb_epoch,
-                    batch_size=batch_size,
-                    shuffle=True,
-                    validation_data=(X_test, X_test),
-                    verbose=1,
-                    callbacks=[checkpointer, tensorboard]).history
-
-
-
-
+checkpointer = ModelCheckpoint(filepath="model.h5", verbose=0, save_best_only=True)
+tensorboard = TensorBoard(log_dir='./logs', histogram_freq=0, write_graph=True, write_images=True)
+history = autoencoder.fit(X_train, X_train, epochs=nb_epoch, batch_size=batch_size, shuffle=True, validation_data=(X_test, X_test), verbose=1, callbacks=[checkpointer, tensorboard]).history
 autoencoder = load_model('model.h5')
 predictions = autoencoder.predict(X_test)
 mse = np.mean(np.power(X_test - predictions, 2), axis=1)
@@ -109,23 +82,22 @@ accuracy=0
 while (recall < 0.5 or accuracy < 0.6):
     print '**************************'
     print threshold
-    threshold+=.0005
+    threshold += .0005
     y_pred = [1 if e > threshold else 0 for e in error_df.reconstruction_error.values]
     conf_matrix = confusion_matrix(error_df.true_class, y_pred)
     tn, fp, fn, tp = conf_matrix.ravel()
-    precision = 1.*tp/(tp+fp)
-    recall = 1.*tp/(tp+fn)
-    f1=(2*recall*precision)/(recall+precision)
-    print 'TP:'+str(tp)
-    print 'FP:'+str(fp)
-    print 'TN:'+str(tn)
-    print 'FN:'+str(fn)
-    accuracy=1.*(tp+tn)/(tp+tn+fp+fn)
-    print 'Accuracy:'+str(accuracy)
-    print 'Precision:'+str(precision)
-    print 'Recall:'+str(recall)
-    print 'F1:'+str(f1)
-
+    precision = 1. * tp / (tp + fp)
+    recall = 1. * tp / (tp + fn)
+    f1 = (2 * recall * precision) / (recall + precision)
+    print 'TP:' + str(tp)
+    print 'FP:' + str(fp)
+    print 'TN:' + str(tn)
+    print 'FN:' + str(fn)
+    accuracy = 1. * (tp + tn) / (tp + tn + fp + fn)
+    print 'Accuracy:' + str(accuracy)
+    print 'Precision:' + str(precision)
+    print 'Recall:' + str(recall)
+    print 'F1:' + str(f1)
 
 groups = error_df.groupby('true_class')
 fig, ax = plt.subplots()
