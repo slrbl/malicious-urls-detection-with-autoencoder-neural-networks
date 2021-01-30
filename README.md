@@ -5,5 +5,5 @@ An article descrbing how it works are available at https://www.linkedin.com/puls
 ## To build and test a model you can run:
 <code>$ python train_and_test_urls_autoencoder.py</code>
 
-## If you want to generated new enriched data you can run:
+## If you would like to generated new enriched data you can run:
 <code>$ python enrich_urls_data.py</code>
