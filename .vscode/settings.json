@@ -1,0 +1,124 @@
+{
+  "python.formatting.provider": "black",
+    "[python]": {
+      "editor.codeActionsOnSave": {
+        "source.organizeImports": true
+      },
+      "editor.detectIndentation": false,
+      "editor.insertSpaces": true,
+      "editor.tabSize": 4
+    },
+    "cSpell.userWords": [
+      "apsw",
+      "automerge",
+      "bgcolor",
+      "blackhole",
+      "blocklist",
+      "blocklists",
+      "browserslist",
+      "cpus",
+      "DNSBL",
+      "domainsproject",
+      "dotenv",
+      "eqeqeq",
+      "fping",
+      "ichunked",
+      "immer",
+      "inet",
+      "iterdump",
+      "KHTML",
+      "lastrowid",
+      "leveldb",
+      "linebreak",
+      "malformatted",
+      "ntoa",
+      "pbar",
+      "protobuf",
+      "reduxjs",
+      "rowid",
+      "tldextract",
+      "tlds",
+      "tqdm",
+      "Tranco"
+    ],
+    "cSpell.words": [
+      "afnic",
+      "aiofiles",
+      "aiohttp",
+      "asarray",
+      "AXFR",
+      "cchardet",
+      "clsname",
+      "COULDNT",
+      "CZDS",
+      "dateutil",
+      "dawg",
+      "dtype",
+      "fastavro",
+      "hostnames",
+      "icann",
+      "imdecode",
+      "IMREAD",
+      "Initialising",
+      "IPPROTO",
+      "isasyncgenfunction",
+      "isawaitable",
+      "isclass",
+      "iscoroutinefunction",
+      "KEEPCNT",
+      "KEEPINTVL",
+      "LANCZOS",
+      "libcurl",
+      "lxml",
+      "ndarray",
+      "noall",
+      "noidnout",
+      "NOSIGNAL",
+      "onesoa",
+      "pycurl",
+      "pytesseract",
+      "recognised",
+      "Referer",
+      "rname",
+      "rusqlite",
+      "sknic",
+      "spavro",
+      "Tesseract",
+      "TSIG",
+      "WBITS",
+      "zfile"
+    ],
+
+    "editor.suggestSelection": "first",
+    "prettier.tabWidth": 4,
+    "python.formatting.blackArgs": [
+      "--line-length=140"
+    ],
+    "python.linting.banditArgs": [
+      "--configfile bandit.yaml"
+    ],
+    "python.linting.banditEnabled": true,
+    "python.linting.flake8Args": [
+      "--max-line-length=140"
+     ],
+    "python.linting.flake8Enabled": true,
+    "python.linting.mypyEnabled": true,
+    "python.sortImports.args": [
+      "--profile",
+      "black"
+    ],
+    "python.terminal.activateEnvironment": false,
+    "python.testing.pytestArgs": [
+      "tests"
+    ],
+    "python.testing.pytestEnabled": true,
+    "python.testing.unittestEnabled": false,
+    "vsicons.dontShowNewVersionMessage": true,
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+    "workbench.editorAssociations": {
+      "*.ipynb": "jupyter-notebook"
+    },
+    "workbench.iconTheme": "vscode-icons",
+    "editor.formatOnType": true,
+    "files.trimTrailingWhitespace": true
+  }
