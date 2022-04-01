@@ -1,8 +1,6 @@
 # Version: 1.0 - 2018/06/29
 # Contact: walid.daboubi@gmail.com
 
-import csv
-
 import pandas as pd
 import ray
 from more_itertools import chunked, flatten
@@ -46,15 +44,15 @@ async def enrich_row_chunk(chunk, dictionary_words):
 if __name__ == "__main__":
 
     dictionary_words = create_dictionary_words()
-    rows = (row for row in csv.reader(open("url_data_combined.csv", "r"), delimiter=","))
-    row_chunks = [(chunk,) for chunk in chunked(rows, 1000)]
 
-    with open("url_enriched_data.csv", "w") as enriched_csv:
-        enriched_csv.write("len,spec_chars,domain,depth,numericals_count,word_count,label\n")
+    rows = (list(row) for row in pd.read_csv("url_data_combined.csv").itertuples(index=False))
+    row_chunks = [(chunk,) for chunk in chunked(rows, 1000)]
 
     ray.shutdown()
     ray.init(include_dashboard=False)
-    data = list(flatten(execute_with_ray(enrich_row_chunk, row_chunks, object_store={"dictionary_words": dictionary_words})))
-    with open("url_enriched_data.csv", "a") as enriched_csv:
+    data = ["len,spec_chars,domain,depth,numericals_count,word_count,label"] + list(
+        flatten(execute_with_ray(enrich_row_chunk, row_chunks, object_store={"dictionary_words": dictionary_words}))
+        )
+    with open("url_enriched_data.csv", "w") as enriched_csv:
         enriched_csv.write('\n'.join(data))
     ray.shutdown()

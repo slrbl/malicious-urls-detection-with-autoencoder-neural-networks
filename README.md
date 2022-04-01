@@ -1,7 +1,7 @@
 # Malicious URLs detection with autoencoder neural network
 
-This repository contains the code source of Detecting malicious URLs using an autoencoder neural network.
-An article descrbing how it works are available at https://www.linkedin.com/pulse/anomaly-detection-autoencoder-neural-network-applied-urls-daboubi/
+This repository contains the source code of Detecting malicious URLs using an autoencoder neural network.
+An article describing how it works is available at https://www.linkedin.com/pulse/anomaly-detection-autoencoder-neural-network-applied-urls-daboubi/
 
 ## Merge Inversion blocklist into url_data.csv
 

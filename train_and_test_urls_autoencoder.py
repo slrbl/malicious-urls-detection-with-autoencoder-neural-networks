@@ -28,8 +28,8 @@ data = df.drop(["domain"], axis=1)
 print(data.shape)
 X_train, X_test = train_test_split(data, test_size=0.2)
 
-# Take only the fraud cases
-X_train = X_train[X_train.label == 1]
+# Take only the normal cases
+X_train = X_train[X_train.label == 0]
 X_train = X_train.drop(["label"], axis=1)
 
 y_test = X_test["label"]
