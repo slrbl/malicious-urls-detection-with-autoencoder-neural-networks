@@ -3,17 +3,35 @@
 This repository contains the source code of Detecting malicious URLs using an autoencoder neural network.
 An article describing how it works is available at https://www.linkedin.com/pulse/anomaly-detection-autoencoder-neural-network-applied-urls-daboubi/
 
-## Merge Inversion blocklist into url_data.csv
+## Requirements
 
-```python merge_url_data.py```
+- Python 3.9
+- x64 CPU
+- Tensorflow-compatible NVIDIA GPU
 
-## To build and test a model you can run
+## Install required libraries
 
-```python train_and_test_urls_autoencoder.py```
+```bash
+pip3 install -r requirements.txt
+```
 
-## If you would like to generated new enriched data you can run
+## Merge Inversion blocklist (Google_hostnames.txt) with url_data.csv
 
-```python enrich_urls_data.py```
+```bash
+python merge_url_data.py
+```
+
+## Generated new enriched data
+
+```bash
+python enrich_urls_data.py
+```
+
+## Build and test a model
+
+```bash
+python train_and_test_urls_autoencoder.py
+```
 
 ## Dataset sources
 
