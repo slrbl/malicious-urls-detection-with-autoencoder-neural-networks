@@ -1,48 +1,58 @@
 # Version: 1.0 - 2018/06/29
 # Contact: walid.daboubi@gmail.com
 
-import sys
-import os
-import csv
+import pandas as pd
+import ray
+from more_itertools import chunked, flatten
 
-LETTERS = 'abcdefghijklmnopqrstuwxyz'
-NUMBERS = '0123456789'
-SPEC_CHARS = ['+','\"','*','#','%','&','(',')','=','?','^','-','.','!','~','_','>','<']
+from parallel_compute import execute_with_ray
 
-enriched_csv = open('url_enriched_data.csv', 'w')
-enriched_csv.write('len,spec_chars,domain,depth,numericals_count,word_count,label\n')
+NUMBERS = set("0123456789")
+SPEC_CHARS = set(["+", '"', "*", "#", "%", "&", "(", ")", "=", "?", "^", "-", ".", "!", "~", "_", ">", "<"])
 
-def check_url_contains_words(url):
-    found_words = []
-    for letter in LETTERS:
-        dictionary = open('{}/dictionary/wb1913_{}.txt'.format(os.path.dirname(os.path.realpath(__file__)), letter), 'r')
-        for line in dictionary.readlines():
-            word = line.split('</B>')[0].replace('<P><B>', '').lower()
-            if str(word) in url.lower() and len(word) > 1 and word not in found_words:
-                found_words.append(word)
-    return len(found_words)
 
-count = 0
+def create_dictionary_words() -> set[str]:
+    df = pd.read_csv('OPTED-Dictionary.csv')
+    dictionary_words: set[str] = set(df['Word'].apply(str))
 
-for row in  csv.reader(open('url_data.csv', 'r'), delimiter = ','):
-    print str(count)
-    count += 1
-    if 'bad' in row[1].lower():
-        label = '1'
-    else:
-        label = '0'
-    spec_chars = 0
-    depth = 0
-    numericals_count = 0
-    word_count = 0
-    url = str(l[0])
-    #print url
-    word_count = check_url_contains_words(url)
-    for c in str(l):
-        if c in SPEC_CHARS:
-            spec_chars += 1
-        if c in ['/']:
-            depth += 1
-        if c in NUMBERS:
-            numericals_count += 1
-    enriched_csv.write(str(len(l[0])) + ',' + str(spec_chars) + ',0,' + str(depth) + ',' + str(numericals_count) + ',' + str(word_count) + ',' + label + '\n')
+    return dictionary_words
+
+
+async def enrich_row_chunk(chunk, dictionary_words):
+    enriched_rows = []
+    for row in chunk:
+        label = "1" if "bad" in row[1].lower() else "0"
+        spec_chars = 0
+        depth = 0
+        numericals_count = 0
+        word_count = 0
+        url = str(row[0])
+
+        url_lower = url.lower()
+        word_count = len(set([word for word in dictionary_words if word in url_lower]))
+        for c in url:
+            if c in SPEC_CHARS:
+                spec_chars += 1
+            elif c in ["/"]:
+                depth += 1
+            elif c in NUMBERS:
+                numericals_count += 1
+        enriched_rows.append(f"{len(url)},{spec_chars},0,{depth},{numericals_count},{word_count},{label}")
+    return enriched_rows
+
+
+if __name__ == "__main__":
+
+    dictionary_words = create_dictionary_words()
+
+    rows = (list(row) for row in pd.read_csv("url_data_combined.csv").itertuples(index=False))
+    row_chunks = [(chunk,) for chunk in chunked(rows, 1000)]
+
+    ray.shutdown()
+    ray.init(include_dashboard=False)
+    data = ["len,spec_chars,domain,depth,numericals_count,word_count,label"] + list(
+        flatten(execute_with_ray(enrich_row_chunk, row_chunks, object_store={"dictionary_words": dictionary_words}))
+        )
+    with open("url_enriched_data.csv", "w") as enriched_csv:
+        enriched_csv.write('\n'.join(data))
+    ray.shutdown()
