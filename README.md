@@ -33,6 +33,10 @@ python enrich_urls_data.py
 python train_and_test_urls_autoencoder.py
 ```
 
+## TODO
+To put in place a REST API
+
+
 ## Dataset sources
 
 - https://www.kaggle.com/datasets/antonyj453/urldataset
