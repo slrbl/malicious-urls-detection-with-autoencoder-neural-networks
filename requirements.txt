@@ -5,5 +5,5 @@ numpy==1.22.3
 pandas==1.4.1
 ray==1.11.0
 scikit-learn==1.0.2
-tensorflow-gpu==2.8.0
+tensorflow-gpu==2.8.1
 tqdm==4.63.1
